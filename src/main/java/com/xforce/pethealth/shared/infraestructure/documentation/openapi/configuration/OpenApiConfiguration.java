@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
     @Bean
-    public OpenAPI learningPlatformOpenApi() {
+    public OpenAPI pethealthPlatformOpenApi() {
         final String securitySchemaName = "bearerAuth";
         var openApi = new OpenAPI();
         openApi
