@@ -8,7 +8,6 @@ public interface PetOwnerService {
     PetOwnerDto createPetOwner(PetOwnerDto petOwnerDto);
     void updatePetOwner(PetOwnerDto petOwnerDto);
     void deletePetOwner(Long id);
-    PetOwnerDto getPetOwner(Long id);
     boolean isPetOwnerExist(Long id);
     public List<PetOwnerDto> getAllPetOwners();
 }
