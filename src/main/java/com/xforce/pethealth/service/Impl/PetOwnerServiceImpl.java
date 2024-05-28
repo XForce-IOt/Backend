@@ -39,13 +39,10 @@ public class PetOwnerServiceImpl implements PetOwnerService {
         petOwnerRepository.save(petOwner);
     }
     @Override
-    public void deletePetOwner(Long id) {
-        petOwnerRepository.deleteById(id);
-    }
-    @Override
     public boolean isPetOwnerExist(Long id) {
         return petOwnerRepository.existsById(id);
     }
+
 
     //Sale de nuestro programa a la BD
     private PetOwnerDto EntityToDto(PetOwner petOwner) {
