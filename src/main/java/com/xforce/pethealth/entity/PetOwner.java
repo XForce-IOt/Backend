@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,24 +19,25 @@ public class PetOwner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", nullable = false, length = 30)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "last_name", nullable = false, length = 30)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "address", nullable = false, length = 22)
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "phone", nullable = false, length = 9)
+    @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "email", nullable = false, length = 22)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 22)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "image", nullable = false)
     private String image;
+
 }

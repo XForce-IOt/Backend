@@ -17,19 +17,19 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", nullable = false, length = 22)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "specie", nullable = false, length = 22)
+    @Column(name = "specie", nullable = false)
     private String specie;
 
     @Column(name = "age", nullable = false)
     private int age;
 
-    @Column(name = "sex", nullable = false, length = 10)
+    @Column(name = "sex", nullable = false)
     private String sex;
 
-    @Column (name = "size", nullable = false, length = 10)
+    @Column (name = "size", nullable = false)
     private String size;
 
     @Column(name = "weight", nullable = false)
