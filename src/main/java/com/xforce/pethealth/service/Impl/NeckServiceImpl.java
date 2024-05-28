@@ -27,10 +27,6 @@ public class NeckServiceImpl implements NeckService {
         neckRepository.deleteById(id);
     }
     @Override
-    public Neck getNeck(Long id) {
-        return neckRepository.findById(id).get();
-    }
-    @Override
     public boolean isNeckExist(Long id) {
         return neckRepository.existsById(id);
     }

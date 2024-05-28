@@ -34,10 +34,6 @@ public class PetOwnerServiceImpl implements PetOwnerService {
         return EntityToDto(petOwnerRepository.save(petOwner));
     }
     @Override
-    public PetOwnerDto getPetOwner(Long id) {
-        return EntityToDto(petOwnerRepository.findById(id).get());
-    }
-    @Override
     public void updatePetOwner(PetOwnerDto petOwnerDto) {
         PetOwner petOwner = DtoToEntity(petOwnerDto);
         petOwnerRepository.save(petOwner);
