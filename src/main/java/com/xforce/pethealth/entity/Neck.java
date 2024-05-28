@@ -20,6 +20,9 @@ public class Neck {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "serialNumber", nullable = false, length = 22)
+    private String serialNumber;
+
     @Column(name = "heartRate", nullable = false)
     private Float heartRate;
 
