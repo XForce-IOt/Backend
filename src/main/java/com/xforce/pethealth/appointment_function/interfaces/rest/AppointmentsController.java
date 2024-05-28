@@ -31,11 +31,7 @@ public class AppointmentsController {
 
     @PostMapping
     public ResponseEntity<AppointmentResource> createAppointment(@PathVariable("vetId") Long vetId, @RequestBody CreateAppointmentResource resource) {
-        if (!vetId.equals(resource.veterinarianId())) {
-            return ResponseEntity.badRequest().build(); // Ensure the vetId in path and body are consistent
-        }
-
-        var createAppointmentCommand = CreateAppointmentCommandFromResourceAssembler.toCommandFromResource(resource);
+        var createAppointmentCommand = CreateAppointmentCommandFromResourceAssembler.toCommandFromResource(vetId, resource);
         Long appointmentId = appointmentCommandService.handle(createAppointmentCommand);
 
         if (appointmentId == 0L) {

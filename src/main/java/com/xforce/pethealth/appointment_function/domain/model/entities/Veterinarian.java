@@ -3,7 +3,6 @@ package com.xforce.pethealth.appointment_function.domain.model.entities;
 import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
 import com.xforce.pethealth.appointment_function.domain.model.value_objects.ContactInfo;
 import com.xforce.pethealth.appointment_function.domain.model.value_objects.FullName;
-import com.xforce.pethealth.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -55,6 +54,7 @@ public class Veterinarian extends AbstractAggregateRoot<Veterinarian> {
         return contactInfo.getContactInfo();
     }
 
+    /*
     public List<Appointment> getAppointments() {
         return appointments;
     }
@@ -62,4 +62,5 @@ public class Veterinarian extends AbstractAggregateRoot<Veterinarian> {
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
     }
+    */
 }

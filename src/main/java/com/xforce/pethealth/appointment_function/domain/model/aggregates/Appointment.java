@@ -41,6 +41,10 @@ public class Appointment extends AbstractAggregateRoot<Appointment> {
         this.dateTime = dateTime;
     }
 
+    public Appointment() {
+
+    }
+
     public void start() {
         this.status = ProgressStatus.STARTED;
     }
