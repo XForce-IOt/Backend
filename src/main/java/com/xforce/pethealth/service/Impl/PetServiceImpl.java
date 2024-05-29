@@ -27,6 +27,10 @@ public class PetServiceImpl implements PetService {
         petRepository.deleteById(id);
     }
     @Override
+    public Pet getPet(Long id) {
+        return petRepository.findById(id).get();
+    }
+    @Override
     public boolean isPetExist(Long id) {
         return petRepository.existsById(id);
     }
