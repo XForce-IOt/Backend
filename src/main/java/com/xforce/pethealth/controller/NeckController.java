@@ -19,13 +19,10 @@ import java.time.LocalDateTime;
 public class NeckController {
     @Autowired
     NeckService neckService;
+    @Autowired
     NeckRepository neckRepository;
+    @Autowired
     PetRepository petRepository;
-
-    public NeckController(NeckRepository neckRepository, PetRepository petRepository) {
-        this.neckRepository = neckRepository;
-        this.petRepository = petRepository;
-    }
 
     @Transactional
     @PostMapping("/pets/{id}/necks")
@@ -37,7 +34,7 @@ public class NeckController {
         }
         neck.setPet(pet);
         neck.setTimestamp(LocalDateTime.now()); //establece el tiempo actual
-        return new ResponseEntity<Neck>(neckService.createNeck(neck), HttpStatus.CREATED);
+        return new ResponseEntity<>(neckService.createNeck(neck), HttpStatus.CREATED);
     }
 
     @GetMapping("/pets/{id}/necks")
@@ -46,14 +43,17 @@ public class NeckController {
             throw new ResourceNotFoundException("Pet not found with id: " + id);
         }
         Neck neck = neckRepository.findByPetId(id);
-        return new ResponseEntity<Neck>(neck, HttpStatus.OK);
+        if (neck == null) {
+            throw new ResourceNotFoundException("Neck not found for pet with id: " + id);
+        }
+        return new ResponseEntity<>(neck, HttpStatus.OK);
     }
 
     @GetMapping("/necks/{serialNumber}")
     public ResponseEntity<Neck> getNeckBySerialNumber(@PathVariable String serialNumber){
         Neck neck = neckRepository.findBySerialNumber(serialNumber).orElseThrow(()
                 -> new ResourceNotFoundException("Neck not found with serial number: " + serialNumber));
-        return new ResponseEntity<Neck>(neck, HttpStatus.OK);
+        return new ResponseEntity<>(neck, HttpStatus.OK);
     }
 
     @DeleteMapping("/necks/{id}")

@@ -20,42 +20,42 @@ import java.util.List;
 public class PetController {
     @Autowired
     private PetService petService;
-    private final PetRepository petRepository;
-    private final PetOwnerRepository petOwnerRepository;
-    public PetController(PetRepository petRepository, PetOwnerRepository petOwnerRepository) {
-        this.petRepository = petRepository;
-        this.petOwnerRepository = petOwnerRepository;
-    }
+    @Autowired
+    private PetRepository petRepository;
+    @Autowired
+    private PetOwnerRepository petOwnerRepository;
+
 
     @Transactional(readOnly = true)
-    @RequestMapping("/pets/filterByName")
+    @GetMapping("/pets/filterByName")
     public ResponseEntity<List<Pet>> getPetByName(@RequestParam String name){
-        return new ResponseEntity<List<Pet>>(petRepository.findByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(petRepository.findByName(name), HttpStatus.OK);
     }
     @Transactional(readOnly = true)
     @GetMapping("/pet-owner/{id}/pets")
     public ResponseEntity<List<Pet>> getPetsByPetOwnerId(@PathVariable Long id){
         PetOwner petOwner = petOwnerRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Pet Owner not found with id: " + id));
-        return new ResponseEntity<List<Pet>>(petRepository.findByPetOwnerId(id), HttpStatus.OK);
+        return new ResponseEntity<>(petRepository.findByPetOwner(petOwner), HttpStatus.OK);
     }
 
     @Transactional
-    @RequestMapping("/pet-owner/{id}/pets")
-    public ResponseEntity<Pet> createPet(Long petOwnerId, Pet pet){
-        PetOwner petOwner = petOwnerRepository.findById(petOwnerId).orElseThrow(()
-                -> new ResourceNotFoundException("Pet Owner not found with id: " + petOwnerId));
+    @PostMapping("/pet-owner/{id}/pets")
+    public ResponseEntity<Pet> createPet(@PathVariable Long id, @RequestBody Pet pet){
+        PetOwner petOwner = petOwnerRepository.findById(id).orElseThrow(()
+                -> new ResourceNotFoundException("Pet Owner not found with id: " + id));
         validatePet(pet);
-        return new ResponseEntity<Pet>(petService.createPet(pet), HttpStatus.CREATED);
+        pet.setPetOwner(petOwner);
+        return new ResponseEntity<>(petService.createPet(pet), HttpStatus.CREATED);
     }
     @GetMapping("/pets/{id}")
-    public ResponseEntity<Pet> getPet(@PathVariable("id") Long id){
+    public ResponseEntity<Pet> getPet(@PathVariable Long id){
         Pet pet = petRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Pet not found with id: " + id));
-        return new ResponseEntity<Pet>(pet, HttpStatus.OK);
+        return new ResponseEntity<>(pet, HttpStatus.OK);
     }
     @PutMapping("/pets/{id}")
-    public ResponseEntity<Object> updatePet(@PathVariable("id") Long id, @RequestBody Pet pet){
+    public ResponseEntity<Object> updatePet(@PathVariable Long id, @RequestBody Pet pet){
         boolean isPetExist = petService.isPetExist(id);
         if(isPetExist){
             validatePet(pet);
@@ -67,9 +67,8 @@ public class PetController {
         }
     }
     @DeleteMapping("/pets/{id}")
-    public ResponseEntity<Object> deletePet(@PathVariable("id") Long id){
-        boolean isPetExist = petService.isPetExist(id);
-        if(isPetExist){
+    public ResponseEntity<Object> deletePet(@PathVariable Long id){
+        if(petService.isPetExist(id)){
             petService.deletePet(id);
             return new ResponseEntity<>("Deleted succesfully", HttpStatus.OK);
         } else {

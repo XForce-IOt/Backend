@@ -1,6 +1,6 @@
 package com.xforce.pethealth.controller;
 
-import com.xforce.pethealth.dto.PetOwnerDto;
+import com.xforce.pethealth.entity.PetOwner;
 import com.xforce.pethealth.exception.ValidationException;
 import com.xforce.pethealth.repository.PetOwnerRepository;
 import com.xforce.pethealth.service.PetOwnerService;
@@ -14,59 +14,59 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pethealth/v1")
 public class PetOwnerController {
-
     @Autowired
     private PetOwnerService petOwnerService;
-    private final PetOwnerRepository petOwnerRepository;
-    public PetOwnerController(PetOwnerRepository petOwnerRepository) {
-        this.petOwnerRepository = petOwnerRepository;
-    }
+    @Autowired
+    private  PetOwnerRepository petOwnerRepository;
+
     @GetMapping("/pet-owners")
-    public List<PetOwnerDto> getAllPetOwners(){
+    public List<PetOwner> getAllPetOwners(){
         return petOwnerService.getAllPetOwners();
     }
     @PostMapping("/pet-owners")
-    public ResponseEntity<PetOwnerDto> createPetOwner(@RequestBody PetOwnerDto petOwnerDto){
-        existsByEmail(petOwnerDto);
-        validatePetOwner(petOwnerDto);
-        return new ResponseEntity<>(petOwnerService.createPetOwner(petOwnerDto), HttpStatus.CREATED);
+    public ResponseEntity<PetOwner> createPetOwner(@RequestBody PetOwner petOwner){
+        existsByEmail(petOwner);
+        validatePetOwner(petOwner);
+        return new ResponseEntity<>(petOwnerService.createPetOwner(petOwner), HttpStatus.CREATED);
     }
     @PutMapping("/pet-owners/{id}")
-    public ResponseEntity<Object> updatePetOwner(@PathVariable("id") Long id, @RequestBody PetOwnerDto petOwnerDto){
-        boolean isPetOwnerExist = petOwnerService.isPetOwnerExist(id);
-        if(isPetOwnerExist){
-            validatePetOwner(petOwnerDto);
-            petOwnerDto.setId(id);
-            petOwnerService.updatePetOwner(petOwnerDto);
-            return new ResponseEntity<>("Updated succesfully", HttpStatus.OK);
+    public ResponseEntity<Object> updatePetOwner(@PathVariable("id") Long id, @RequestBody PetOwner petOwner){
+        if (!id.equals(petOwner.getId())) {
+            throw new ValidationException("El ID del dueño de mascota en la URL no coincide con el ID proporcionado en el cuerpo de la solicitud");
+        }
+
+        validatePetOwner(petOwner);
+        if(petOwnerService.isPetOwnerExist(id)){
+            petOwnerService.updatePetOwner(petOwner);
+            return new ResponseEntity<>("Updated successfully", HttpStatus.OK);
         } else {
-            throw new ValidationException("Data were not updated");
+            throw new ValidationException("El dueño de la mascota con ID " + id + " no existe");
         }
     }
 
-    public void validatePetOwner(PetOwnerDto petOwnerDto){
-        if(petOwnerDto.getName()== null || petOwnerDto.getName().trim().isEmpty()){
+    public void validatePetOwner(PetOwner petOwner){
+        if(petOwner.getName()== null || petOwner.getName().trim().isEmpty()){
             throw new ValidationException("El nombre del dueño de la mascota es obligatorio");
         }
-        if(petOwnerDto.getLastName()== null || petOwnerDto.getLastName().trim().isEmpty()){
+        if(petOwner.getLastName()== null || petOwner.getLastName().trim().isEmpty()){
             throw new ValidationException("El apellido del dueño de la mascota es obligatorio");
         }
-        if(petOwnerDto.getAddress()== null || petOwnerDto.getAddress().trim().isEmpty()){
+        if(petOwner.getAddress()== null || petOwner.getAddress().trim().isEmpty()){
             throw new ValidationException("La dirección del dueño de la mascota es obligatoria");
         }
-        if(petOwnerDto.getPhone()== null || petOwnerDto.getPhone().trim().isEmpty()){
+        if(petOwner.getPhone()== null || petOwner.getPhone().trim().isEmpty()){
             throw new ValidationException("El teléfono del dueño de la mascota es obligatorio");
         }
-        if(petOwnerDto.getEmail()== null || petOwnerDto.getEmail().trim().isEmpty()){
+        if(petOwner.getEmail()== null || petOwner.getEmail().trim().isEmpty()){
             throw new ValidationException("El email del dueño de la mascota es obligatorio");
         }
-        if(petOwnerDto.getPassword()== null || petOwnerDto.getPassword().trim().isEmpty()){
+        if(petOwner.getPassword()== null || petOwner.getPassword().trim().isEmpty()){
             throw new ValidationException("La contraseña del dueño de la mascota es obligatoria");
         }
     }
 
-    public void existsByEmail(PetOwnerDto petOwnerDto){
-        if(petOwnerRepository.existsByEmail(petOwnerDto.getEmail())){
+    public void existsByEmail(PetOwner petOwner){
+        if(petOwnerRepository.existsByEmail(petOwner.getEmail())){
             throw new ValidationException("El email ya se encuentra registrado");
         }
     }

@@ -47,9 +47,7 @@ public class Neck {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    @ManyToOne
-    @JoinColumn(name = "pet_id", nullable = false,
-        foreignKey = @ForeignKey(name = "FK_PET_ID"))
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToOne
+    @JoinColumn(name = "pet_id", nullable = true)
     private Pet pet;
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -39,5 +40,8 @@ public class PetOwner {
 
     @Column(name = "image", nullable = false)
     private String image;
+
+    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL)
+    private List<Pet> pets = new ArrayList<>();
 
 }

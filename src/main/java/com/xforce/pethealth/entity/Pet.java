@@ -42,12 +42,9 @@ public class Pet {
     private String image;
 
     @ManyToOne
-    @JoinColumn(name = "pet_owner_id", nullable = false,
-        foreignKey = @ForeignKey(name = "FK_PET_OWNER_ID"))
+    @JoinColumn(name = "pet_owner_id", nullable = false)
     private PetOwner petOwner;
 
-    @ManyToOne
-    @JoinColumn(name = "neck_id", nullable = false,
-        foreignKey = @ForeignKey(name = "FK_NECK_ID"))
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
     private Neck neck;
 }

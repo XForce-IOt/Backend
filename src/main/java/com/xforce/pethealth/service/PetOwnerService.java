@@ -1,12 +1,12 @@
 package com.xforce.pethealth.service;
 
-import com.xforce.pethealth.dto.PetOwnerDto;
+import com.xforce.pethealth.entity.PetOwner;
 
 import java.util.List;
 
 public interface PetOwnerService {
-    PetOwnerDto createPetOwner(PetOwnerDto petOwnerDto);
-    void updatePetOwner(PetOwnerDto petOwnerDto);
+    PetOwner createPetOwner(PetOwner petOwnerDto);
+    void updatePetOwner(PetOwner petOwnerDto);
     boolean isPetOwnerExist(Long id);
-    public List<PetOwnerDto> getAllPetOwners();
+    public List<PetOwner> getAllPetOwners();
 }
