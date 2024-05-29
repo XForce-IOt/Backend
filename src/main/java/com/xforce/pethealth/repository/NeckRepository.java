@@ -3,9 +3,11 @@ package com.xforce.pethealth.repository;
 import com.xforce.pethealth.entity.Neck;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
+
 
 public interface NeckRepository extends JpaRepository<Neck, Long> {
-    Boolean existsBySerialNumber(String serialNumber);
+    Optional<Neck> findBySerialNumber(String serialNumber);
+    Boolean existsByPetId(Long petId);
     Neck findByPetId(Long petId);
 }
