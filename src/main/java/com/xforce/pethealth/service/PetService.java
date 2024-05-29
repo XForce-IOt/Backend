@@ -9,5 +9,6 @@ public interface PetService {
     void updatePet(Pet pet);
     void deletePet(Long id);
     List<Pet> getAllPets();
+    Pet getPet(Long id);
     boolean isPetExist(Long id);
 }
