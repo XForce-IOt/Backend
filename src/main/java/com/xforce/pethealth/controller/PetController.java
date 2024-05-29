@@ -46,7 +46,7 @@ public class PetController {
         PetOwner petOwner = petOwnerRepository.findById(petOwnerId).orElseThrow(()
                 -> new ResourceNotFoundException("Pet Owner not found with id: " + petOwnerId));
         validatePet(pet);
-        return new ResponseEntity<Pet>(petRepository.save(pet), HttpStatus.CREATED);
+        return new ResponseEntity<Pet>(petService.createPet(pet), HttpStatus.CREATED);
     }
     @GetMapping("/pets/{id}")
     public ResponseEntity<Pet> getPet(@PathVariable("id") Long id){

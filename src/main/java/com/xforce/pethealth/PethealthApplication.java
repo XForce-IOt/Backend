@@ -51,5 +51,4 @@ public class PethealthApplication {
             System.out.println("Error al crear la base de datos: " + e.getMessage());
         }
     }
-
 }
