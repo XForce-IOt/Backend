@@ -1,5 +1,6 @@
 package com.xforce.pethealth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,10 +42,12 @@ public class Pet {
     @Column(name = "image", nullable = false)
     private String image;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "pet_owner_id", nullable = false)
     private PetOwner petOwner;
 
-    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL)
-    private Neck neck;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "neck_id", referencedColumnName = "id")
+    private Neck neck = new Neck();
 }

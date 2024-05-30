@@ -1,13 +1,14 @@
 package com.xforce.pethealth.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,37 +18,18 @@ import java.time.LocalDateTime;
 @Table(name="necks")
 public class Neck {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "serialNumber", nullable = false)
     private String serialNumber;
 
-    @Column(name = "heartRate", nullable = false)
-    private Float heartRate;
-
-    @Column(name = "physicalActivity", nullable = false)
-    private Float physicalActivity;
-
-    @Column(name = "temperature", nullable = false)
-    private Float temperature;
-
-    @Column(name = "sleepQuality", nullable = false)
-    private Float sleepQuality;
-
-    @Column(name = "hydrationLevel", nullable = false)
-    private Float hydrationLevel;
-
-    @Column(name = "latitude", nullable = false)
-    private Float latitude;
-
-    @Column(name = "longitude", nullable = false)
-    private Float longitude;
-
-    @Column(name = "timestamp", nullable = false)
-    private LocalDateTime timestamp;
-
+    @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "pet_id", nullable = true)
+    @JoinColumn(name = "pet_id", nullable = false)
     private Pet pet;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "neck", cascade = CascadeType.ALL)
+    private List<HealthMetric> healthMetrics = new ArrayList<>();
 }

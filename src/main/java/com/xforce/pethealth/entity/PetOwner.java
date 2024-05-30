@@ -1,5 +1,6 @@
 package com.xforce.pethealth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +42,7 @@ public class PetOwner {
     @Column(name = "image", nullable = false)
     private String image;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL)
     private List<Pet> pets = new ArrayList<>();
 
