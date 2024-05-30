@@ -1,9 +1,11 @@
 package com.xforce.pethealth.controller;
 
+import com.xforce.pethealth.entity.Neck;
 import com.xforce.pethealth.entity.Pet;
 import com.xforce.pethealth.entity.PetOwner;
 import com.xforce.pethealth.exception.ResourceNotFoundException;
 import com.xforce.pethealth.exception.ValidationException;
+import com.xforce.pethealth.repository.NeckRepository;
 import com.xforce.pethealth.repository.PetOwnerRepository;
 import com.xforce.pethealth.repository.PetRepository;
 import com.xforce.pethealth.service.PetService;
@@ -24,6 +26,8 @@ public class PetController {
     private PetRepository petRepository;
     @Autowired
     private PetOwnerRepository petOwnerRepository;
+    @Autowired
+    private NeckRepository neckRepository;
 
 
     @Transactional(readOnly = true)
@@ -41,12 +45,41 @@ public class PetController {
 
     @Transactional
     @PostMapping("/pet-owner/{id}/pets")
-    public ResponseEntity<Pet> createPet(@PathVariable Long id, @RequestBody Pet pet){
-        PetOwner petOwner = petOwnerRepository.findById(id).orElseThrow(()
-                -> new ResourceNotFoundException("Pet Owner not found with id: " + id));
-        validatePet(pet);
+    public ResponseEntity<Pet> createPet(@PathVariable Long id,@RequestBody Pet pet){
+        // Obtener el PetOwner al que pertenece la mascota
+        PetOwner petOwner = petOwnerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pet Owner not found with id: " + id));
+        // Verificar si el Neck existe
+        Neck neck = pet.getNeck();
+        if (neck == null) {
+            throw new ValidationException("Neck information is missing");
+        }
+        /*if (neck.getId() != null) {
+            Neck finalNeck = neck;
+            neck = neckRepository.findById(neck.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Neck not found with id: " + finalNeck.getId()));
+
+            if (neck.getPet() != null) {
+                throw new ValidationException("Neck already assigned to another pet");
+            }
+        } else {
+            neck = neckRepository.save(neck);
+        }*/
+        neck = neckRepository.save(neck);
+        // Asignar el PetOwner a la mascota
         pet.setPetOwner(petOwner);
-        return new ResponseEntity<>(petService.createPet(pet), HttpStatus.CREATED);
+
+        // Establecer la relación del Neck con el Pet
+        neck.setPet(pet);
+        pet.setNeck(neck);
+
+        // Guardar el Pet (esto también guardará el Neck porque la relación es cascada)
+        Pet savedPet = petRepository.save(pet);
+
+        // Actualizar el PetOwner
+        petOwner.getPets().add(savedPet);
+        petOwnerRepository.save(petOwner);
+        return new ResponseEntity<>(savedPet, HttpStatus.CREATED);
     }
     @GetMapping("/pets/{id}")
     public ResponseEntity<Pet> getPet(@PathVariable Long id){

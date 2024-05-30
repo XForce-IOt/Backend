@@ -24,18 +24,17 @@ public class NeckController {
     @Autowired
     PetRepository petRepository;
 
-    @Transactional
+    /*@Transactional
     @PostMapping("/pets/{id}/necks")
-    public ResponseEntity<Neck> createNeck(@PathVariable Long id,@RequestBody Neck neck){
+    public ResponseEntity<Neck> createNeck(@PathVariable Long id, @RequestBody Neck neck){
         Pet pet = petRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("Pet not found with id: " + id));
         if (neckService.isNeckExist(id)) { //Si el collar esta asociado con una mascota
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         neck.setPet(pet);
-        neck.setTimestamp(LocalDateTime.now()); //establece el tiempo actual
         return new ResponseEntity<>(neckService.createNeck(neck), HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping("/pets/{id}/necks")
     public ResponseEntity<Neck> getNeck(@PathVariable Long id){
