@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface NeckRepository extends JpaRepository<Neck, Long> {
     Optional<Neck> findBySerialNumber(String serialNumber);
-    Boolean existsByPetId(Long petId);
     Neck findByPetId(Long petId);
 }
