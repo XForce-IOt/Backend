@@ -1,6 +1,8 @@
 package com.xforce.pethealth.account_management.domain.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.xforce.pethealth.account_management.domain.model.aggregate.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,4 +47,15 @@ public class PetOwner {
     @JsonIgnore
     @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL)
     private List<Pet> pets = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Account account;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL)
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+
 }
