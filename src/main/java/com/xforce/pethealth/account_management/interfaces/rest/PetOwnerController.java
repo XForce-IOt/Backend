@@ -24,11 +24,11 @@ public class PetOwnerController {
     public List<PetOwner> getAllPetOwners(){
         return petOwnerService.getAllPetOwners();
     }
-    @PostMapping("/pet-owners")
-    public ResponseEntity<PetOwner> createPetOwner(@RequestBody PetOwner petOwner){
+    @PostMapping("/accounts/{id}/pet-owners")
+    public ResponseEntity<PetOwner> createPetOwner(@PathVariable("id") Long id, @RequestBody PetOwner petOwner){
         existsByEmail(petOwner);
         validatePetOwner(petOwner);
-        return new ResponseEntity<>(petOwnerService.createPetOwner(petOwner), HttpStatus.CREATED);
+        return new ResponseEntity<>(petOwnerService.createPetOwner(id, petOwner), HttpStatus.CREATED);
     }
     @PutMapping("/pet-owners/{id}")
     public ResponseEntity<Object> updatePetOwner(@PathVariable("id") Long id, @RequestBody PetOwner petOwner){
