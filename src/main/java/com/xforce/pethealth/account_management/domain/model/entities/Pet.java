@@ -2,54 +2,64 @@ package com.xforce.pethealth.account_management.domain.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
+import com.xforce.pethealth.account_management.domain.model.commands.AddPetCommand;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name="pets")
-public class Pet {
+@EntityListeners(AuditingEntityListener.class)
+public class Pet extends AbstractAggregateRoot<Pet>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "specie", nullable = false)
+    @Column(nullable = false)
     private String specie;
 
-    @Column(name = "age", nullable = false)
-    private int age;
+    @Column(nullable = false)
+    private Integer age;
 
-    @Column(name = "sex", nullable = false)
+    @Column(nullable = false)
     private String sex;
 
-    @Column (name = "size", nullable = false)
+    @Column (nullable = false)
     private String size;
 
-    @Column(name = "weight", nullable = false)
-    private double weight;
+    @Column(nullable = false)
+    private Double weight;
 
-    @Column(name = "perimeter", nullable = false)
-    private double perimeter;
+    @Column(nullable = false)
+    private Double perimeter;
 
-    @Column(name = "image", nullable = false)
+    @Column(nullable = false)
     private String image;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "pet_owner_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "petOwner_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private PetOwner petOwner;
 
-    @JsonIgnore
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Neck neck;
+    protected Pet() {}
+
+    public Pet(PetOwner petOwner, AddPetCommand command) {
+        this.petOwner = petOwner;
+        this.name = command.name();
+        this.specie = command.specie();
+        this.age = command.age();
+        this.sex = command.sex();
+        this.size = command.size();
+        this.weight = command.weight();
+        this.perimeter = command.perimeter();
+        this.image = command.image();
+    }
 }
+

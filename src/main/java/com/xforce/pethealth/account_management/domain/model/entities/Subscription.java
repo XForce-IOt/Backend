@@ -1,40 +1,41 @@
 package com.xforce.pethealth.account_management.domain.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
+import com.xforce.pethealth.account_management.domain.model.commands.AddSubscriptionCommand;
+import com.xforce.pethealth.account_management.domain.model.value_objects.Plans;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name="subscriptions")
-public class Subscription {
+@EntityListeners(AuditingEntityListener.class)
+public class Subscription extends AbstractAggregateRoot<Subscription> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(nullable = false)
+    private Plans plans;
 
-    @Column(name = "price", nullable = false)
-    private String price;
+    @Column(nullable = false)
+    private Float price;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "pet_owner_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "petOwner_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private PetOwner petOwner;
 
+    protected Subscription() {}
 
-    //public PetOwner getPetOwner() {
-    ///    return petOwner;
-    //}
-
-    //public void setPetOwner(PetOwner petOwner) {
-    //    this.petOwner = petOwner;
-    //}
+    public Subscription(PetOwner petOwner, AddSubscriptionCommand command) {
+        this.petOwner = petOwner;
+        this.plans = command.plans();
+        this.price = command.price();
+    }
 }
