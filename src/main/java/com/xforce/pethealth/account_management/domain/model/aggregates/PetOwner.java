@@ -1,6 +1,7 @@
-package com.xforce.pethealth.account_management.domain.model.aggregate;
+package com.xforce.pethealth.account_management.domain.model.aggregates;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.xforce.pethealth.account_management.domain.model.commands.CreatePetOwnerCommand;
 import com.xforce.pethealth.account_management.domain.model.entities.Pet;
 import com.xforce.pethealth.account_management.domain.model.entities.Subscription;
 import jakarta.persistence.*;
@@ -14,8 +15,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -47,11 +46,22 @@ public class PetOwner extends AbstractAggregateRoot<PetOwner>{
     private String image;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> pets = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL)
-    private List<Subscription> subscriptions = new ArrayList<>();
+    @OneToOne(mappedBy = "petOwner", cascade = CascadeType.ALL)
+    private Subscription subscription;
 
+    protected PetOwner() {}
+
+    public PetOwner(CreatePetOwnerCommand command) {
+        this.name = command.name();
+        this.lastName = command.lastName();
+        this.address = command.address();
+        this.phone = command.phone();
+        this.email = command.email();
+        this.password = command.password();
+        this.image = command.image();
+    }
 }
