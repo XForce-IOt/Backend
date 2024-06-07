@@ -1,5 +1,6 @@
 package com.xforce.pethealth.function_collar.application.internal.commandservices;
 
+import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
 import com.xforce.pethealth.account_management.domain.model.entities.Pet;
 import com.xforce.pethealth.account_management.infrastructure.persistence.jpa.repositories.PetOwnerRepository;
 import com.xforce.pethealth.function_collar.domain.model.commands.CreateSensorDataCommand;
@@ -28,9 +29,14 @@ public class SensorDataCommandServiceImpl implements SensorDataCommandService {
     @Transactional
     @Override
     public Long handle(CreateSensorDataCommand command) {
-        // Encuentra el dueño de la mascota y luego la mascota usando el ID del pet
-        Pet pet = petOwnerRepository.findPetById(command.petId())
-                .orElseThrow(() -> new RuntimeException("Pet not found with ID: " + command.petId()));
+        // Verifica que el dueño y la mascota existen y están relacionados
+        PetOwner petOwner = petOwnerRepository.findById(command.petOwnerId())
+                .orElseThrow(() -> new RuntimeException("Pet owner not found with ID: " + command.petOwnerId()));
+
+        Pet pet = petOwner.getPets().stream()
+                .filter(p -> p.getId().equals(command.petId()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No pet found with ID: " + command.petId() + " for this pet owner"));
 
         String url = "https://hearty-serenity-production.up.railway.app/api/v1/sensor_data";
         SensorData fetchedData = restTemplate.getForObject(url, SensorData.class);
@@ -40,6 +46,7 @@ public class SensorDataCommandServiceImpl implements SensorDataCommandService {
         }
 
         SensorData newSensorData = new SensorData(
+                petOwner,
                 pet,
                 fetchedData.getTemperature(),
                 fetchedData.getHumidity(),

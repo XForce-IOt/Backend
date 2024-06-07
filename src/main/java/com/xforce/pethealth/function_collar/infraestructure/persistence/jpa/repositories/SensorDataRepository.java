@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
-    List<SensorData> findAllByPetId(Long petId);
+    List<SensorData> findAllByPetIdAndPetPetOwnerId(Long petId, Long petOwnerId);
 }
