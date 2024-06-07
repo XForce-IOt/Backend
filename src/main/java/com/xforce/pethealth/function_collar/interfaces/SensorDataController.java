@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/v1/pets/{petId}/sensors_data", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/pet-owners/{petOwnerId}/pets/{petId}/sensors_data", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Sensor Data", description = "Sensor Data Management Endpoints")
 public class SensorDataController {
     private final SensorDataQueryService sensorDataQueryService;
@@ -28,8 +28,9 @@ public class SensorDataController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SensorDataResource>> getAllSensorDataByPetId(@PathVariable Long petId) {
-        List<SensorData> sensorDataList = sensorDataQueryService.handle(new GetAllSensorDataByPetIdQuery(petId));
+    public ResponseEntity<List<SensorDataResource>> getAllSensorDataByPetOwnerAndPet(@PathVariable Long petOwnerId, @PathVariable Long petId) {
+        GetAllSensorDataByPetIdQuery query = new GetAllSensorDataByPetIdQuery(petOwnerId, petId);
+        List<SensorData> sensorDataList = sensorDataQueryService.handle(query);
         List<SensorDataResource> resources = sensorDataList.stream()
                 .map(SensorDataResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());

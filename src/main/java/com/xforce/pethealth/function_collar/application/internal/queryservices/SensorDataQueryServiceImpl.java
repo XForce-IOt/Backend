@@ -19,7 +19,7 @@ public class SensorDataQueryServiceImpl implements SensorDataQueryService {
 
     @Override
     public List<SensorData> handle(GetAllSensorDataByPetIdQuery query) {
-        return sensorDataRepository.findAllByPetId(query.petId());
+        return sensorDataRepository.findAllByPetIdAndPetPetOwnerId(query.petId(), query.petOwnerId());
     }
 
     @Override
