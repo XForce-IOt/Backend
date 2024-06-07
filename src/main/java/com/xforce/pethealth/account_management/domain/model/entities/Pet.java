@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
 import com.xforce.pethealth.account_management.domain.model.commands.AddPetCommand;
+import com.xforce.pethealth.function_collar.domain.model.entities.SensorData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,6 +50,9 @@ public class Pet extends AbstractAggregateRoot<Pet>{
     @JoinColumn(name = "petOwner_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private PetOwner petOwner;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SensorData> sensorDataList;
 
     protected Pet() {}
 
