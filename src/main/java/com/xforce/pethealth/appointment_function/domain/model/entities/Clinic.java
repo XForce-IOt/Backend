@@ -21,6 +21,10 @@ public class Clinic extends AbstractAggregateRoot<Veterinarian> {
 
     @Getter
     @Column(nullable = false)
+    private String name;
+
+    @Getter
+    @Column(nullable = false)
     private String number;
 
     @Getter
@@ -30,8 +34,9 @@ public class Clinic extends AbstractAggregateRoot<Veterinarian> {
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Veterinarian> veterinarians;
 
-    public Clinic(double rating, String number, String socialMedia) {
+    public Clinic(double rating, String name, String number, String socialMedia) {
         this.rating = rating;
+        this.name = name;
         this.number = number;
         this.socialMedia = socialMedia;
     }

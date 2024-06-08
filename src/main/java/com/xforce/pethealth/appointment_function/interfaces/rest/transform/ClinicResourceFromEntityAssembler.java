@@ -5,6 +5,6 @@ import com.xforce.pethealth.appointment_function.interfaces.rest.resources.Clini
 
 public class ClinicResourceFromEntityAssembler {
     public static ClinicResource toResourceFromEntity(Clinic entity) {
-        return new ClinicResource(entity.getId(), entity.getRating(), entity.getNumber(), entity.getSocialMedia());
+        return new ClinicResource(entity.getId(), entity.getRating(), entity.getName(), entity.getNumber(), entity.getSocialMedia());
     }
 }

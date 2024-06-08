@@ -5,6 +5,6 @@ import com.xforce.pethealth.appointment_function.interfaces.rest.resources.Creat
 
 public class CreateClinicCommandFromResourceAssembler {
     public static CreateClinicCommand toCommandFromResource(CreateClinicResource resource) {
-        return new CreateClinicCommand(resource.rating(), resource.number(), resource.socialMedia());
+        return new CreateClinicCommand(resource.rating(), resource.name(), resource.number(), resource.socialMedia());
     }
 }

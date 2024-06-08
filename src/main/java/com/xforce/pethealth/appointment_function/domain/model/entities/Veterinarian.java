@@ -39,7 +39,7 @@ public class Veterinarian extends AbstractAggregateRoot<Veterinarian> {
     })
     private ContactInfo contactInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clinic_id", nullable = false)
     @Getter
     private Clinic clinic;
