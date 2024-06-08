@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 //import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/api/v1/clinics/{clinicId}/veterinarians", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/pet-health/v1/clinics/{clinicId}/veterinarians", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Veterinarians", description = "Veterinarians Management Endpoints")
 public class VeterinariansController {
 
