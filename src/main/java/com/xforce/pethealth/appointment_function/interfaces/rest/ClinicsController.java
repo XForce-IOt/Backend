@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/pet-health/v1/clinics", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Clinics", description = "Clinics Management Endpoints")
 public class ClinicsController {

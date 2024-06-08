@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 //import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/pet-health/v1/clinics/{clinicId}/veterinarians", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Veterinarians", description = "Veterinarians Management Endpoints")
 public class VeterinariansController {
