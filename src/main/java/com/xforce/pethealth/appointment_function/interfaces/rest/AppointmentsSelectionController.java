@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/pet-health/v1/pet-owners/{petOwnerId}/appointment-selections", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Appointments Selection", description = "Appointment Selection Management Endpoints")
 public class AppointmentsSelectionController {

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/pet-health/v1/pet-owners")
 public class PetOwnerController {
     private final PetOwnerCommandService petOwnerCommandService;
