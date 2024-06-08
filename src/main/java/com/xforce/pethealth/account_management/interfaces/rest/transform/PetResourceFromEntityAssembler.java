@@ -6,6 +6,7 @@ import com.xforce.pethealth.account_management.interfaces.rest.resources.PetReso
 public class PetResourceFromEntityAssembler {
     public static PetResource toResourceFromEntity(Pet pet) {
         return new PetResource(
+            pet.getId(),
                 pet.getName(),
                 pet.getSpecie(),
                 pet.getAge(),

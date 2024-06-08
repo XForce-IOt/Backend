@@ -6,6 +6,7 @@ import com.xforce.pethealth.account_management.interfaces.rest.resources.Subscri
 public class SubscriptionResourceFromEntityAssembler {
     public static SubscriptionResource toResourceFromEntity(Subscription subscription) {
         return new SubscriptionResource(
+            subscription.getId(),
                 subscription.getPlans(),
                 subscription.getPrice()
         );
