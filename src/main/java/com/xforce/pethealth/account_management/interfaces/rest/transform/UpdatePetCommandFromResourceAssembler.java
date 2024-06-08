@@ -13,7 +13,7 @@ public class UpdatePetCommandFromResourceAssembler {
                 resource.age(),
                 resource.sex(),
                 resource.size(),
-                resource.weight(),
+                //resource.weight(),
                 resource.perimeter(),
                 resource.image()
         );

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
-@RequestMapping("/api/pethealth/v1/pet-owners")
+@RequestMapping("/api/pet-health/v1/pet-owners")
 public class PetOwnerController {
     private final PetOwnerCommandService petOwnerCommandService;
     private final PetOwnerQueryService petOwnerQueryService;

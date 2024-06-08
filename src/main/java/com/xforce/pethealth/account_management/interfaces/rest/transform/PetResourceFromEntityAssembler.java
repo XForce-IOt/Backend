@@ -11,7 +11,7 @@ public class PetResourceFromEntityAssembler {
                 pet.getAge(),
                 pet.getSex(),
                 pet.getSize(),
-                pet.getWeight(),
+                //pet.getWeight(),
                 pet.getPerimeter(),
                 pet.getImage()
         );

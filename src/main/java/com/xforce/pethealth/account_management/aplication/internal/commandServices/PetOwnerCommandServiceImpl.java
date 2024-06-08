@@ -67,7 +67,7 @@ public class PetOwnerCommandServiceImpl implements PetOwnerCommandService{
         pet.setAge(command.age());
         pet.setSex(command.sex());
         pet.setSize(command.size());
-        pet.setWeight(command.weight());
+        //pet.setWeight(command.weight());
         pet.setPerimeter(command.perimeter());
         pet.setImage(command.image());
 

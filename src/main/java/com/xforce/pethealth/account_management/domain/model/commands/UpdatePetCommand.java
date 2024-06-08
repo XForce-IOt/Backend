@@ -1,6 +1,6 @@
 package com.xforce.pethealth.account_management.domain.model.commands;
 
-public record UpdatePetCommand(Long petOwnerId, Long petId, String name, String specie, int age, String sex, String size, double weight, double perimeter, String image) {
+public record UpdatePetCommand(Long petOwnerId, Long petId, String name, String specie, int age, String sex, String size, double perimeter, String image) {
     public UpdatePetCommand {
         if (petOwnerId == null)
             throw new IllegalArgumentException("petOwnerId cannot be null");
@@ -16,8 +16,8 @@ public record UpdatePetCommand(Long petOwnerId, Long petId, String name, String 
             throw new IllegalArgumentException("sex cannot be null or empty");
         if (size == null || size.isEmpty())
             throw new IllegalArgumentException("size cannot be null or empty");
-        if (weight < 0)
-            throw new IllegalArgumentException("weight cannot be negative");
+        /*if (weight < 0)
+            throw new IllegalArgumentException("weight cannot be negative");*/
         if (perimeter < 0)
             throw new IllegalArgumentException("perimeter cannot be negative");
         if (image == null || image.isEmpty())
