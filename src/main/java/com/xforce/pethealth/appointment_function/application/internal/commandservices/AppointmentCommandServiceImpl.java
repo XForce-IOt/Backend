@@ -23,9 +23,14 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     @Override
     @Transactional
     public Long handle(CreateAppointmentCommand command) {
-        // Verificar si el veterinario existe
         Veterinarian veterinarian = veterinarianRepository.findById(command.veterinarianId())
                 .orElseThrow(() -> new IllegalArgumentException("Veterinarian not found with ID: " + command.veterinarianId()));
+
+        // Verificar si el veterinario pertenece a la clínica especificada
+        if (!veterinarian.getClinic().getId().equals(command.clinicId())) {
+            throw new IllegalArgumentException("Veterinarian does not belong to the specified clinic with ID: " + command.clinicId());
+        }
+
         // Crear la nueva cita con la instancia de Veterinarian
         Appointment appointment = new Appointment(veterinarian, command.initialStatus(), command.description(), command.dateTime());
         appointmentRepository.save(appointment);
@@ -35,10 +40,15 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     @Override
     @Transactional
     public void handle(DeleteAppointmentCommand command) {
-        if (!appointmentRepository.existsById(command.appointmentId())) {
-            throw new IllegalArgumentException("Appointment not found with ID: " + command.appointmentId());
+        Appointment appointment = appointmentRepository.findById(command.appointmentId())
+                .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + command.appointmentId()));
+
+        // Verificar que el veterinario y la clínica correspondan
+        if (!appointment.getVeterinarian().getId().equals(command.veterinarianId()) ||
+                !appointment.getVeterinarian().getClinic().getId().equals(command.clinicId())) {
+            throw new IllegalArgumentException("Mismatch in clinic or veterinarian ID");
         }
 
-        appointmentRepository.deleteById(command.appointmentId());
+        appointmentRepository.delete(appointment);
     }
 }

@@ -28,7 +28,7 @@ public class SensorDataController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SensorDataResource>> getAllSensorDataByPetOwnerAndPet(@PathVariable Long petOwnerId, @PathVariable Long petId) {
+    public ResponseEntity<List<SensorDataResource>> getAllSensorDataByPetOwnerAndPet(@PathVariable("petOwnerId") Long petOwnerId, @PathVariable("petId") Long petId) {
         GetAllSensorDataByPetIdQuery query = new GetAllSensorDataByPetIdQuery(petOwnerId, petId);
         List<SensorData> sensorDataList = sensorDataQueryService.handle(query);
         List<SensorDataResource> resources = sensorDataList.stream()
