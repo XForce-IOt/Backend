@@ -36,8 +36,8 @@ public class Pet extends AbstractAggregateRoot<Pet>{
     @Column (nullable = false)
     private String size;
 
-    @Column(nullable = false)
-    private Double weight;
+    //@Column(nullable = false)
+    //private Double weight;
 
     @Column(nullable = false)
     private Double perimeter;
@@ -63,7 +63,7 @@ public class Pet extends AbstractAggregateRoot<Pet>{
         this.age = command.age();
         this.sex = command.sex();
         this.size = command.size();
-        this.weight = command.weight();
+        //this.weight = command.weight();
         this.perimeter = command.perimeter();
         this.image = command.image();
     }

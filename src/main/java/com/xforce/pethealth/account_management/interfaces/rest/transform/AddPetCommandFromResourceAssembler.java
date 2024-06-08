@@ -12,7 +12,7 @@ public class AddPetCommandFromResourceAssembler {
                 resource.age(),
                 resource.sex(),
                 resource.size(),
-                resource.weight(),
+                //resource.weight(),
                 resource.perimeter(),
                 resource.image()
         );

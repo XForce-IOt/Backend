@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/clinics", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/pet-health/v1/clinics", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Clinics", description = "Clinics Management Endpoints")
 public class ClinicsController {
     private final ClinicCommandService clinicCommandService;

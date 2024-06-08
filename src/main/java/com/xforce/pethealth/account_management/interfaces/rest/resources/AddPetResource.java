@@ -1,6 +1,6 @@
 package com.xforce.pethealth.account_management.interfaces.rest.resources;
 
-public record AddPetResource(Long petOwnerId, String name, String specie, Integer age, String sex, String size, Double weight, Double perimeter, String image) {
+public record AddPetResource(Long petOwnerId, String name, String specie, Integer age, String sex, String size, Double perimeter, String image) {
     public AddPetResource {
         if (petOwnerId == null)
             throw new IllegalArgumentException("petOwnerId cannot be null");
@@ -14,8 +14,8 @@ public record AddPetResource(Long petOwnerId, String name, String specie, Intege
             throw new IllegalArgumentException("sex cannot be null or empty");
         if (size == null || size.isEmpty())
             throw new IllegalArgumentException("size cannot be null or empty");
-        if (weight == null)
-            throw new IllegalArgumentException("weight cannot be null");
+        /*if (weight == null)
+            throw new IllegalArgumentException("weight cannot be null");*/
         if (perimeter == null)
             throw new IllegalArgumentException("perimeter cannot be null");
         if (image == null || image.isEmpty())
