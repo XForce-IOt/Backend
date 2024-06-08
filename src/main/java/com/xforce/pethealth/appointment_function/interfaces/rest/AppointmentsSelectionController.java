@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/v1/pet-owners/{petOwnerId}/appointment-selections", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/pet-owners/v1/{petOwnerId}/appointment-selections", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Appointments Selection", description = "Appointment Selection Management Endpoints")
 public class AppointmentsSelectionController {
     private final AppointmentSelectionCommandService commandService;
