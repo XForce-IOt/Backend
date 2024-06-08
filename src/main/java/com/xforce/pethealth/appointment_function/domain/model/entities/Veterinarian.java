@@ -28,6 +28,10 @@ public class Veterinarian extends AbstractAggregateRoot<Veterinarian> {
     @Embedded
     private FullName name;
 
+    @Getter
+    @Column(nullable = false)
+    private String password;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "phone", column = @Column(name = "contact_phone")),
@@ -35,11 +39,18 @@ public class Veterinarian extends AbstractAggregateRoot<Veterinarian> {
     })
     private ContactInfo contactInfo;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_id", nullable = false)
+    @Getter
+    private Clinic clinic;
+
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
-    public Veterinarian(String firstName, String lastName, String specialization, String phone, String email) {
+    public Veterinarian(Clinic clinic, String firstName, String lastName, String password, String specialization, String phone, String email) {
+        this.clinic = clinic;
         this.name = new FullName(firstName, lastName);
+        this.password = password;
         this.specialization = specialization;
         this.contactInfo = new ContactInfo(phone, email);
     }

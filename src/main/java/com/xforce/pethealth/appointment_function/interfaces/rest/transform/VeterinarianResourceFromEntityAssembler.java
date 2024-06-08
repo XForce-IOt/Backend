@@ -5,6 +5,6 @@ import com.xforce.pethealth.appointment_function.interfaces.rest.resources.Veter
 
 public class VeterinarianResourceFromEntityAssembler {
     public static VeterinarianResource toResourceFromEntity(Veterinarian entity) {
-        return new VeterinarianResource(entity.getId(), entity.getFullName(), entity.getSpecialization(), entity.getContactInfo());
+        return new VeterinarianResource(entity.getId(), entity.getFullName(), entity.getPassword(), entity.getSpecialization(), entity.getContactInfo());
     }
 }

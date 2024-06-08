@@ -1,5 +1,8 @@
 package com.xforce.pethealth.appointment_function.interfaces.rest;
 
+import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
+import com.xforce.pethealth.appointment_function.domain.model.commands.DeleteAppointmentCommand;
+import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsByVeterinarianIdQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAppointmentByIdQuery;
 import com.xforce.pethealth.appointment_function.domain.services.AppointmentCommandService;
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/v1/veterinarians/{vetId}/appointments", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/clinics/{clinicId}/veterinarians/{vetId}/appointments", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Appointments", description = "Appointment Management Endpoints")
 public class AppointmentsController {
     private final AppointmentCommandService appointmentCommandService;
@@ -30,11 +33,11 @@ public class AppointmentsController {
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentResource> createAppointment(@PathVariable("vetId") Long vetId, @RequestBody CreateAppointmentResource resource) {
-        var createAppointmentCommand = CreateAppointmentCommandFromResourceAssembler.toCommandFromResource(vetId, resource);
+    public ResponseEntity<AppointmentResource> createAppointment(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @RequestBody CreateAppointmentResource resource) {
+        var createAppointmentCommand = CreateAppointmentCommandFromResourceAssembler.toCommandFromResource(clinicId, vetId, resource);
         Long appointmentId = appointmentCommandService.handle(createAppointmentCommand);
 
-        if (appointmentId == 0L) {
+        if (appointmentId == null || appointmentId == 0L) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -58,17 +61,32 @@ public class AppointmentsController {
         return ResponseEntity.ok(appointmentResource);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AppointmentResource>> getAppointmentsForVeterinarian(@PathVariable("vetId") Long vetId) {
+    @GetMapping("/all")
+    public ResponseEntity<List<AppointmentResource>> getAllAppointment() {
         var getAllAppointmentsQuery = new GetAllAppointmentsQuery();
         var appointments = appointmentQueryService.handle(getAllAppointmentsQuery);
+        var appointmentResources = appointments.stream().map(AppointmentResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
+        return ResponseEntity.ok(appointmentResources);
+    }
 
-        // Filtrar las citas para asegurar que pertenecen al veterinario indicado en el path
-        var filteredAppointments = appointments.stream()
-                .filter(appointment -> appointment.getVeterinarian().getId().equals(vetId))
+    @GetMapping
+    public ResponseEntity<List<AppointmentResource>> getAppointmentsByClinicAndVet(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId) {
+        GetAllAppointmentsByVeterinarianIdQuery query = new GetAllAppointmentsByVeterinarianIdQuery(clinicId, vetId);
+        List<Appointment> appointmentList= appointmentQueryService.handle(query);
+        List<AppointmentResource> resources = appointmentList.stream()
                 .map(AppointmentResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
+    }
 
-        return ResponseEntity.ok(filteredAppointments);
+    @DeleteMapping("/{appointmentId}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @PathVariable("appointmentId") Long appointmentId) {
+        var deleteAppointmentCommand = new DeleteAppointmentCommand(clinicId, vetId, appointmentId);
+        try {
+            appointmentCommandService.handle(deleteAppointmentCommand);
+            return ResponseEntity.ok("Appointment deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting appointment: " + e.getMessage());
+        }
     }
 }

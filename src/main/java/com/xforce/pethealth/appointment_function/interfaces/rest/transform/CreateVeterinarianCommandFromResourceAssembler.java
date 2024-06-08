@@ -4,7 +4,7 @@ import com.xforce.pethealth.appointment_function.domain.model.commands.CreateVet
 import com.xforce.pethealth.appointment_function.interfaces.rest.resources.CreateVeterinarianResource;
 
 public class CreateVeterinarianCommandFromResourceAssembler {
-    public static CreateVeterinarianCommand toCommandFromResource(CreateVeterinarianResource resource) {
-        return new CreateVeterinarianCommand(resource.firstName(), resource.lastName(), resource.specialization(), resource.phone(), resource.email());
+    public static CreateVeterinarianCommand toCommandFromResource(Long clinicId, CreateVeterinarianResource resource) {
+        return new CreateVeterinarianCommand(clinicId, resource.firstName(), resource.lastName(), resource.password(), resource.specialization(), resource.phone(), resource.email());
     }
 }
