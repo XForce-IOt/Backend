@@ -1,5 +1,6 @@
 package com.xforce.pethealth.appointment_function.interfaces.rest;
 
+import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
 import com.xforce.pethealth.appointment_function.domain.model.commands.DeleteAppointmentCommand;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsByVeterinarianIdQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsQuery;
@@ -60,25 +61,19 @@ public class AppointmentsController {
         return ResponseEntity.ok(appointmentResource);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AppointmentResource>> getAppointmentsForVeterinarian(@PathVariable("vetId") Long vetId) {
+    @GetMapping("/all")
+    public ResponseEntity<List<AppointmentResource>> getAllAppointment() {
         var getAllAppointmentsQuery = new GetAllAppointmentsQuery();
         var appointments = appointmentQueryService.handle(getAllAppointmentsQuery);
-
-        // Filtrar las citas para asegurar que pertenecen al veterinario indicado en el path
-        var filteredAppointments = appointments.stream()
-                .filter(appointment -> appointment.getVeterinarian().getId().equals(vetId))
-                .map(AppointmentResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(filteredAppointments);
+        var appointmentResources = appointments.stream().map(AppointmentResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
+        return ResponseEntity.ok(appointmentResources);
     }
 
     @GetMapping
     public ResponseEntity<List<AppointmentResource>> getAppointmentsByClinicAndVet(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId) {
-        var query = new GetAllAppointmentsByVeterinarianIdQuery(clinicId, vetId);
-        var appointments = appointmentQueryService.handle(query);
-        var resources = appointments.stream()
+        GetAllAppointmentsByVeterinarianIdQuery query = new GetAllAppointmentsByVeterinarianIdQuery(clinicId, vetId);
+        List<Appointment> appointmentList= appointmentQueryService.handle(query);
+        List<AppointmentResource> resources = appointmentList.stream()
                 .map(AppointmentResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(resources);
