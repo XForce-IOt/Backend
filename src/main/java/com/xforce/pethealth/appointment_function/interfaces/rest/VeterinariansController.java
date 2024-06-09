@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 //import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200, https://backend-production-6ed3.up.railway.app")
+@CrossOrigin(origins = "http://localhost:4200, https://backend-production-6ed3.up.railway.app, https://pet-health.netlify.app")
 @RequestMapping(value = "/api/pet-health/v1/clinics/{clinicId}/veterinarians", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Veterinarians", description = "Veterinarians Management Endpoints")
 public class VeterinariansController {
