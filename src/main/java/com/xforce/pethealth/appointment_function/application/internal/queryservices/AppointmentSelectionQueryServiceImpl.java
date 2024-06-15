@@ -25,6 +25,6 @@ public class AppointmentSelectionQueryServiceImpl implements AppointmentSelectio
 
     @Override
     public Optional<AppointmentSelection> handle(GetAppointmentSelectionByIdQuery query) {
-        return appointmentSelectionRepository.findByPetOwnerIdAndId(query.petOwnerId(), query.appointmentSelectionId());
+        return appointmentSelectionRepository.findByPetOwnerIdAndPetIdAndId(query.petOwnerId(), query.petId(), query.appointmentSelectionId());
     }
 }

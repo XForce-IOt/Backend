@@ -1,6 +1,7 @@
 package com.xforce.pethealth.appointment_function.domain.model.entities;
 
 import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
+import com.xforce.pethealth.account_management.domain.model.entities.Pet;
 import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,9 +26,15 @@ public class AppointmentSelection extends AbstractAggregateRoot<AppointmentSelec
     @Getter
     private Appointment appointment;
 
-    public AppointmentSelection(PetOwner petOwner, Appointment appointment) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pet_id", nullable = false)
+    @Getter
+    private Pet pet;
+
+    public AppointmentSelection(PetOwner petOwner, Pet pet, Appointment appointment) {
         this.petOwner = petOwner;
         this.appointment = appointment;
+        this.pet = pet;
     }
 
     public AppointmentSelection() {}

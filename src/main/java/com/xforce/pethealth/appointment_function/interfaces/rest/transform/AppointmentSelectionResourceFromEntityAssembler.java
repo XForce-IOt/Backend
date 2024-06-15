@@ -8,6 +8,7 @@ public class AppointmentSelectionResourceFromEntityAssembler {
         return new AppointmentSelectionResource(
                 entity.getId(),
                 entity.getPetOwner().getId(),
+                entity.getPet().getId(),
                 entity.getAppointment().getId()
         );
     }

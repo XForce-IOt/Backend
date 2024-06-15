@@ -4,9 +4,10 @@ import com.xforce.pethealth.appointment_function.domain.model.commands.CreateApp
 import com.xforce.pethealth.appointment_function.interfaces.rest.resources.CreateAppointmentSelectionResource;
 
 public class CreateAppointmentSelectionCommandFromResourceAssembler {
-    public static CreateAppointmentSelectionCommand toCommandFromResource(Long petOwnerId, CreateAppointmentSelectionResource resource) {
+    public static CreateAppointmentSelectionCommand toCommandFromResource(Long petOwnerId, Long petId, CreateAppointmentSelectionResource resource) {
         return new CreateAppointmentSelectionCommand(
                 petOwnerId,
+                petId,
                 resource.appointmentId()
         );
     }

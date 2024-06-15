@@ -5,6 +5,7 @@ public record ClinicResource(
         double rating,
         String name,
         String number,
-        String socialMedia
+        String socialMedia,
+        String profilePicture
 ) {
 }

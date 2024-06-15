@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200, https://backend-production-6ed3.up.railway.app, https://pet-health.netlify.app")
 @CrossOrigin(origins = "https://pet-health.netlify.app")
-@RequestMapping(value = "/api/pet-health/v1/pet-owners/{petOwnerId}/appointment-selections", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/pet-health/v1/pet-owners/{petOwnerId}/pets/{petId}/appointment-selections", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Appointments Selection", description = "Appointment Selection Management Endpoints")
 public class AppointmentsSelectionController {
     private final AppointmentSelectionCommandService commandService;
@@ -34,13 +34,13 @@ public class AppointmentsSelectionController {
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentSelectionResource> createAppointmentSelection(@PathVariable Long petOwnerId, @RequestBody CreateAppointmentSelectionResource resource) {
-        CreateAppointmentSelectionCommand command = CreateAppointmentSelectionCommandFromResourceAssembler.toCommandFromResource(petOwnerId, resource);
+    public ResponseEntity<AppointmentSelectionResource> createAppointmentSelection(@PathVariable Long petOwnerId, @PathVariable Long petId, @RequestBody CreateAppointmentSelectionResource resource) {
+        CreateAppointmentSelectionCommand command = CreateAppointmentSelectionCommandFromResourceAssembler.toCommandFromResource(petOwnerId, petId, resource);
         Long selectionId = commandService.handle(command);
         if (selectionId == null) {
             return ResponseEntity.badRequest().build();
         }
-        var selection = queryService.handle(new GetAppointmentSelectionByIdQuery(petOwnerId, selectionId)).orElse(null);
+        var selection = queryService.handle(new GetAppointmentSelectionByIdQuery(petOwnerId, petId, selectionId)).orElse(null);
         if (selection == null) {
             return ResponseEntity.notFound().build();
         }
@@ -59,9 +59,9 @@ public class AppointmentsSelectionController {
     }
 
     @DeleteMapping("/{selectionId}")
-    public ResponseEntity<Void> deleteAppointmentSelection(@PathVariable("petOwnerId") Long petOwnerId, @PathVariable("selectionId") Long selectionId) {
+    public ResponseEntity<Void> deleteAppointmentSelection(@PathVariable("petOwnerId") Long petOwnerId, @PathVariable("petId") Long petId, @PathVariable("selectionId") Long selectionId) {
         try {
-            commandService.handle(new DeleteAppointmentSelectionCommand(petOwnerId, selectionId));
+            commandService.handle(new DeleteAppointmentSelectionCommand(petOwnerId, petId, selectionId));
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

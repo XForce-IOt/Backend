@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AppointmentSelectionRepository extends JpaRepository<AppointmentSelection, Long> {
     List<AppointmentSelection> findAllByPetOwnerId(Long petOwnerId);
-    Optional<AppointmentSelection> findByPetOwnerIdAndId(Long petOwnerId, Long id);
+    Optional<AppointmentSelection> findByPetOwnerIdAndPetIdAndId(Long petOwnerId, Long petId, Long id);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
 import com.xforce.pethealth.account_management.domain.model.commands.AddPetCommand;
+import com.xforce.pethealth.appointment_function.domain.model.entities.AppointmentSelection;
 import com.xforce.pethealth.function_collar.domain.model.entities.SensorData;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,6 +54,9 @@ public class Pet extends AbstractAggregateRoot<Pet>{
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SensorData> sensorDataList;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AppointmentSelection> appointmentSelections;
 
     protected Pet() {}
 
