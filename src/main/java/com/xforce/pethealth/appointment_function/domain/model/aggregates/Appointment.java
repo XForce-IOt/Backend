@@ -19,6 +19,10 @@ public class Appointment extends AbstractAggregateRoot<Appointment> {
 
     @Column(nullable = false)
     @Getter
+    private String title;
+
+    @Column(nullable = false)
+    @Getter
     private ProgressStatus status;
 
     @Column(nullable = false)
@@ -34,8 +38,9 @@ public class Appointment extends AbstractAggregateRoot<Appointment> {
     @Getter
     private Veterinarian veterinarian;
 
-    public Appointment(Veterinarian veterinarian, ProgressStatus status, String description, String dateTime) {
+    public Appointment(Veterinarian veterinarian, String title, ProgressStatus status, String description, String dateTime) {
         this.veterinarian = veterinarian;
+        this.title = title;
         this.status = status;
         this.description = description;
         this.dateTime = dateTime;
