@@ -17,7 +17,7 @@ public class ClinicCommandServiceImpl implements ClinicCommandService {
 
     @Override
     public Long handle(CreateClinicCommand command) {
-        Clinic clinic = new Clinic(command.rating(), command.name(), command.number(), command.socialMedia());
+        Clinic clinic = new Clinic(command.rating(), command.name(), command.number(), command.socialMedia(), command.profilePicture());
         clinicRepository.save(clinic);
         return clinic.getId();
     }

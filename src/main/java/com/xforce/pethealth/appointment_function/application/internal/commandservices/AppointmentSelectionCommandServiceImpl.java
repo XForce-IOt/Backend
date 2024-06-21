@@ -1,6 +1,7 @@
 package com.xforce.pethealth.appointment_function.application.internal.commandservices;
 
 import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
+import com.xforce.pethealth.account_management.domain.model.entities.Pet;
 import com.xforce.pethealth.account_management.infrastructure.persistence.jpa.repositories.PetOwnerRepository;
 import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
 import com.xforce.pethealth.appointment_function.domain.model.commands.CreateAppointmentSelectionCommand;
@@ -29,10 +30,14 @@ public class AppointmentSelectionCommandServiceImpl implements AppointmentSelect
     public Long handle(CreateAppointmentSelectionCommand command) {
         PetOwner petOwner = petOwnerRepository.findById(command.petOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("Pet owner not found with ID: " + command.petOwnerId()));
+        Pet pet = petOwner.getPets().stream()
+                .filter(p -> p.getId().equals(command.petId()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No pet found with ID: " + command.petId() + " for this pet owner"));
         Appointment appointment = appointmentRepository.findById(command.appointmentId())
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + command.appointmentId()));
 
-        AppointmentSelection appointmentSelection = new AppointmentSelection(petOwner, appointment);
+        AppointmentSelection appointmentSelection = new AppointmentSelection(petOwner, pet, appointment);
         appointmentSelectionRepository.save(appointmentSelection);
         return appointmentSelection.getId();
     }
