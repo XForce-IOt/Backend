@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
                 registry.addMapping("/api/**")
                         .allowedOrigins("http://localhost:4200", "https://backend-production-6ed3.up.railway.app", "https://pet-health.netlify.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("")
+                        .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };
