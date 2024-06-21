@@ -32,7 +32,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
         }
 
         // Crear la nueva cita con la instancia de Veterinarian
-        Appointment appointment = new Appointment(veterinarian, command.initialStatus(), command.description(), command.dateTime());
+        Appointment appointment = new Appointment(veterinarian, command.title(), command.initialStatus(), command.description(), command.dateTime());
         appointmentRepository.save(appointment);
         return appointment.getId();
     }

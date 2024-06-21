@@ -5,6 +5,6 @@ import com.xforce.pethealth.appointment_function.interfaces.rest.resources.Creat
 
 public class CreateAppointmentCommandFromResourceAssembler {
     public static CreateAppointmentCommand toCommandFromResource(Long clinicId, Long vetId, CreateAppointmentResource resource) {
-        return new CreateAppointmentCommand(clinicId, vetId, resource.dateTime(), resource.description(), resource.initialStatus());
+        return new CreateAppointmentCommand(clinicId, vetId, resource.title(), resource.dateTime(), resource.description(), resource.initialStatus());
     }
 }
