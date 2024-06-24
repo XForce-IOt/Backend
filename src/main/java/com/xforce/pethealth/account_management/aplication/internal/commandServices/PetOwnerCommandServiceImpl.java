@@ -44,6 +44,13 @@ public class PetOwnerCommandServiceImpl implements PetOwnerCommandService{
     }
     @Override
     @Transactional
+    public void handle(DeletePetOwnerCommand command) {
+        PetOwner petOwner = petOwnerRepository.findById(command.petOwnerId())
+                .orElseThrow(() -> new IllegalArgumentException("Pet owner not found"));
+        petOwnerRepository.delete(petOwner);
+    }
+    @Override
+    @Transactional
     public Optional<Pet> handle(AddPetCommand command) {
         PetOwner petOwner = petOwnerRepository.findById(command.petOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("Pet owner not found"));
