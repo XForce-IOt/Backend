@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface PetOwnerCommandService {
     Optional<PetOwner> handle(CreatePetOwnerCommand command);
     Optional<PetOwner> handle(UpdatePetOwnerCommand command);
+    void handle(DeletePetOwnerCommand command);
     Optional<Pet> handle(AddPetCommand command);
     void handle(DeletePetCommand command);
     Optional<Pet> handle(UpdatePetCommand command);
