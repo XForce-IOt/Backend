@@ -1,6 +1,7 @@
 package com.xforce.pethealth.appointment_function.application.internal.queryservices;
 
 import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
+import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsByPetOwnerIdQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsByVeterinarianIdQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAppointmentByIdQuery;
@@ -37,5 +38,10 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
     @Transactional
     public List<Appointment> handle(GetAllAppointmentsByVeterinarianIdQuery query) {
         return appointmentRepository.findAllByClinicIdAndVeterinarianId(query.clinicId(), query.veterinarianId());
+    }
+
+    @Override
+    public List<Appointment> handle(GetAllAppointmentsByPetOwnerIdQuery query) {
+        return appointmentRepository.findByPet_PetOwner_Id(query.petOwnerId());
     }
 }

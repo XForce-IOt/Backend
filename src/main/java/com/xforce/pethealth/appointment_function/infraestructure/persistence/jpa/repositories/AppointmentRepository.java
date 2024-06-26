@@ -12,4 +12,5 @@ import java.util.List;
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     @Query("SELECT a FROM Appointment a WHERE a.veterinarian.clinic.id = :clinicId AND a.veterinarian.id = :vetId")
     List<Appointment> findAllByClinicIdAndVeterinarianId(@Param("clinicId") Long clinicId, @Param("vetId") Long vetId);
+    List<Appointment> findByPet_PetOwner_Id(Long petOwnerId);
 }

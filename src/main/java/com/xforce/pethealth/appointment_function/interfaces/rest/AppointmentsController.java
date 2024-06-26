@@ -2,6 +2,7 @@ package com.xforce.pethealth.appointment_function.interfaces.rest;
 
 import com.xforce.pethealth.appointment_function.domain.model.aggregates.Appointment;
 import com.xforce.pethealth.appointment_function.domain.model.commands.DeleteAppointmentCommand;
+import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsByPetOwnerIdQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsByVeterinarianIdQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAllAppointmentsQuery;
 import com.xforce.pethealth.appointment_function.domain.model.queries.GetAppointmentByIdQuery;
@@ -76,6 +77,19 @@ public class AppointmentsController {
         GetAllAppointmentsByVeterinarianIdQuery query = new GetAllAppointmentsByVeterinarianIdQuery(clinicId, vetId);
         List<Appointment> appointmentList= appointmentQueryService.handle(query);
         List<AppointmentResource> resources = appointmentList.stream()
+                .map(AppointmentResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
+    }
+
+    @GetMapping("/by-pet-owner")
+    public ResponseEntity<List<AppointmentResource>> getAppointmentsByPetOwnerId(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @PathVariable("petOwnerId") Long petOwnerId) {
+        var query = new GetAllAppointmentsByPetOwnerIdQuery(petOwnerId);
+        List<Appointment> appointments = appointmentQueryService.handle(query);
+        if (appointments.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<AppointmentResource> resources = appointments.stream()
                 .map(AppointmentResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(resources);
