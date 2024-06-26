@@ -2,6 +2,7 @@ package com.xforce.pethealth.account_management.interfaces.rest;
 
 import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
 import com.xforce.pethealth.account_management.domain.model.commands.DeletePetCommand;
+import com.xforce.pethealth.account_management.domain.model.commands.DeletePetOwnerCommand;
 import com.xforce.pethealth.account_management.domain.model.entities.Pet;
 import com.xforce.pethealth.account_management.domain.model.entities.Subscription;
 import com.xforce.pethealth.account_management.domain.model.queries.*;
@@ -61,6 +62,12 @@ public class PetOwnerController {
         Optional<PetOwner> updatePetOwner = petOwnerCommandService.handle(command);
         return updatePetOwner.map(value -> ResponseEntity.ok(PetOwnerResourceFromEntityAssembler.toResourceFromEntity(value)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{petOwnerId}")
+    public ResponseEntity<Void> deletePetOwner(@PathVariable Long petOwnerId) {
+        petOwnerCommandService.handle(new DeletePetOwnerCommand(petOwnerId));
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{petOwnerId}/pets")

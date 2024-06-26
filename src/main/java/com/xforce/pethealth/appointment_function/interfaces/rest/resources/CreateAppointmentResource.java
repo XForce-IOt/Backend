@@ -5,6 +5,7 @@ import com.xforce.pethealth.appointment_function.domain.model.value_objects.Prog
 import java.time.LocalDateTime;
 
 public record CreateAppointmentResource(
+        Long petId,
         String title,
         String dateTime,
         String description,
