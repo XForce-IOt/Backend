@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200, https://backend-production-6ed3.up.railway.app, https://pet-health.netlify.app")
 @CrossOrigin(origins = "https://pet-health.netlify.app")
-@RequestMapping(value = "/api/pet-health/v1/clinics/{clinicId}/veterinarians/{vetId}/appointments", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/pet-health/v1/clinics/{clinicId}/veterinarians/{vetId}/pet-owners/{petOwnerId}/appointments", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Appointments", description = "Appointment Management Endpoints")
 public class AppointmentsController {
     private final AppointmentCommandService appointmentCommandService;
@@ -35,8 +35,8 @@ public class AppointmentsController {
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentResource> createAppointment(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @RequestBody CreateAppointmentResource resource) {
-        var createAppointmentCommand = CreateAppointmentCommandFromResourceAssembler.toCommandFromResource(clinicId, vetId, resource);
+    public ResponseEntity<AppointmentResource> createAppointment(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @PathVariable("petOwnerId") Long petOwnerId, @RequestBody CreateAppointmentResource resource) {
+        var createAppointmentCommand = CreateAppointmentCommandFromResourceAssembler.toCommandFromResource(clinicId, vetId, petOwnerId, resource);
         Long appointmentId = appointmentCommandService.handle(createAppointmentCommand);
 
         if (appointmentId == null || appointmentId == 0L) {
@@ -82,8 +82,8 @@ public class AppointmentsController {
     }
 
     @DeleteMapping("/{appointmentId}")
-    public ResponseEntity<?> deleteAppointment(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @PathVariable("appointmentId") Long appointmentId) {
-        var deleteAppointmentCommand = new DeleteAppointmentCommand(clinicId, vetId, appointmentId);
+    public ResponseEntity<?> deleteAppointment(@PathVariable("clinicId") Long clinicId, @PathVariable("vetId") Long vetId, @PathVariable("petOwnerId") Long petOwnerId, @PathVariable("petId") Long petId, @PathVariable("appointmentId") Long appointmentId) {
+        var deleteAppointmentCommand = new DeleteAppointmentCommand(clinicId, vetId, petOwnerId, petId, appointmentId);
         try {
             appointmentCommandService.handle(deleteAppointmentCommand);
             return ResponseEntity.ok("Appointment deleted successfully.");

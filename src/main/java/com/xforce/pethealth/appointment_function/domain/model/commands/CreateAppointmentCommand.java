@@ -5,6 +5,8 @@ import com.xforce.pethealth.appointment_function.domain.model.value_objects.Prog
 public record CreateAppointmentCommand(
         Long clinicId,
         Long veterinarianId,        // ID del veterinario que ofrece la cita
+        Long petOwnerId,
+        Long petId,
         String title,
         String dateTime,     // Fecha y hora de la cita
         String description,         // Descripción de la cita

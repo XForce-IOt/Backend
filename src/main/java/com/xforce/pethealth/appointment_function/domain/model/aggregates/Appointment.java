@@ -1,5 +1,7 @@
 package com.xforce.pethealth.appointment_function.domain.model.aggregates;
 
+import com.xforce.pethealth.account_management.domain.model.aggregates.PetOwner;
+import com.xforce.pethealth.account_management.domain.model.entities.Pet;
 import com.xforce.pethealth.appointment_function.domain.model.entities.Veterinarian;
 import com.xforce.pethealth.appointment_function.domain.model.value_objects.ProgressStatus;
 import jakarta.persistence.*;
@@ -38,8 +40,14 @@ public class Appointment extends AbstractAggregateRoot<Appointment> {
     @Getter
     private Veterinarian veterinarian;
 
-    public Appointment(Veterinarian veterinarian, String title, ProgressStatus status, String description, String dateTime) {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pet_id", nullable = false)
+    @Getter
+    private Pet pet;
+
+    public Appointment(Veterinarian veterinarian, Pet pet, String title, ProgressStatus status, String description, String dateTime) {
         this.veterinarian = veterinarian;
+        this.pet = pet;
         this.title = title;
         this.status = status;
         this.description = description;

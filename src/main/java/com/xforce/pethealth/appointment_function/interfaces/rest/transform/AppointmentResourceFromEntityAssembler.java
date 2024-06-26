@@ -5,6 +5,6 @@ import com.xforce.pethealth.appointment_function.interfaces.rest.resources.Appoi
 
 public class AppointmentResourceFromEntityAssembler {
     public static AppointmentResource toResourceFromEntity(Appointment entity) {
-        return new AppointmentResource(entity.getId(), entity.getTitle(), entity.getDateTime(), entity.getDescription());
+        return new AppointmentResource(entity.getId(), entity.getPet().getId(), entity.getTitle(), entity.getDateTime(), entity.getDescription());
     }
 }
