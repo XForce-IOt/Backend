@@ -1,12 +1,17 @@
 package com.xforce.pethealth.function_collar.interfaces;
 
+import com.xforce.pethealth.function_collar.domain.model.commands.CreateSensorDataCommand;
 import com.xforce.pethealth.function_collar.domain.model.entities.SensorData;
 import com.xforce.pethealth.function_collar.domain.model.queries.GetAllSensorDataByPetIdQuery;
 import com.xforce.pethealth.function_collar.domain.model.queries.GetAllSensorDataQuery;
+import com.xforce.pethealth.function_collar.domain.model.queries.GetSensorDataByIdQuery;
+import com.xforce.pethealth.function_collar.domain.services.SensorDataCommandService;
 import com.xforce.pethealth.function_collar.domain.services.SensorDataQueryService;
 import com.xforce.pethealth.function_collar.interfaces.rest.resources.SensorDataResource;
+import com.xforce.pethealth.function_collar.interfaces.rest.transform.CreateSensorDataCommandFromResourceAssembler;
 import com.xforce.pethealth.function_collar.interfaces.rest.transform.SensorDataResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +25,30 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/pet-health/v1/pet-owners/{petOwnerId}/pets/{petId}/sensors_data", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Sensor Data", description = "Sensor Data Management Endpoints")
 public class SensorDataController {
+    private final SensorDataCommandService sensorDataCommandService;
     private final SensorDataQueryService sensorDataQueryService;
 
-    public SensorDataController(SensorDataQueryService sensorDataQueryService) {
+    public SensorDataController(SensorDataCommandService sensorDataCommandService ,SensorDataQueryService sensorDataQueryService) {
+        this.sensorDataCommandService = sensorDataCommandService;
         this.sensorDataQueryService = sensorDataQueryService;
+    }
+
+    @PostMapping
+    public ResponseEntity<SensorDataResource> createSensorData(@PathVariable("petOwnerId") Long petOwnerId, @PathVariable("petId") Long petId) {
+        CreateSensorDataCommand command = CreateSensorDataCommandFromResourceAssembler.toCommandFromResource(petOwnerId, petId);
+        Long sensorDataId = sensorDataCommandService.handle(command);
+
+        if (sensorDataId == 0L) {
+            return ResponseEntity.badRequest().build();
+        }
+        var getSensorDataByIdQuery = new GetSensorDataByIdQuery(sensorDataId);
+        var sensorData = sensorDataQueryService.handle(getSensorDataByIdQuery);
+        if (sensorData.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        var sensorDataResource = SensorDataResourceFromEntityAssembler.toResourceFromEntity(sensorData.get());
+        return new ResponseEntity<>(sensorDataResource, HttpStatus.CREATED);
     }
 
     @GetMapping

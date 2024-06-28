@@ -39,23 +39,27 @@ public class SensorDataCommandServiceImpl implements SensorDataCommandService {
                 .orElseThrow(() -> new RuntimeException("No pet found with ID: " + command.petId() + " for this pet owner"));
 
         String url = "https://hearty-serenity-production.up.railway.app/api/v1/sensor_data";
-        SensorData fetchedData = restTemplate.getForObject(url, SensorData.class);
+        SensorData[] fetchedDataArray = restTemplate.getForObject(url, SensorData[].class);
 
-        if (fetchedData == null) {
+        if (fetchedDataArray == null || fetchedDataArray.length == 0) {
             throw new RuntimeException("No sensor data could be fetched.");
         }
 
-        SensorData newSensorData = new SensorData(
-                petOwner,
-                pet,
-                fetchedData.getTemperature(),
-                fetchedData.getHumidity(),
-                fetchedData.getDistance(),
-                fetchedData.getPulse()
-        );
+        for (SensorData fetchedData : fetchedDataArray) {
+            SensorData newSensorData = new SensorData(
+                    petOwner,
+                    pet,
+                    fetchedData.getTemperature(),
+                    fetchedData.getHumidity(),
+                    fetchedData.getDistance(),
+                    fetchedData.getPulse()
+            );
 
-        sensorDataRepository.save(newSensorData);
-        return newSensorData.getId();
+            sensorDataRepository.save(newSensorData);
+        }
+
+        // Devuelve el ID del último sensorData guardado (puedes ajustar esto según tus necesidades)
+        return fetchedDataArray[fetchedDataArray.length - 1].getId();
     }
 
 
